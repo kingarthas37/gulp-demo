@@ -7,10 +7,9 @@ var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var gutil = require('gulp-util');
 var sourcemaps = require('gulp-sourcemaps');
-var assign = require('lodash.assign');
 var uglify = require('gulp-uglify');
 var factor = require('factor-bundle');
- 
+
 
 //最基本使用gulp -> browserify
 /*
@@ -62,6 +61,7 @@ gulp.task('default',function() {
     };
     
     bundler.on('update', bundle);
+    bundler.on('log', gutil.log);
     
     return bundle();
     

@@ -12,7 +12,7 @@ page.init = function() {
 
     console.log(swfobject);
     
-    console.log('pagekingarthas');
+    console.log('terry');
     console.log(swfobject);
     console.log(flashDetect.installed);
     
