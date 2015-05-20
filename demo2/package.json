@@ -1,17 +1,44 @@
 {
+  "dependencies": {
+    "bootstrap": "^3.3.4",
+    "fancybox": "^3.0.0",
+    "jcarousel": "^0.3.2",
+    "jquery": "^2.1.4",
+    "jquery-validation": "^1.13.1",
+    "jquery.cookie": "^1.4.1"
+  },
   "devDependencies": {
-    "browserify": "^9.0.8",
+    "browserify": "^10.1.3",
+    "browserify-shim": "^3.8.6",
+    "factor-bundle": "^2.4.0",
     "gulp": "*",
-    "gulp-concat": "*",
     "gulp-sourcemaps": "^1.5.2",
     "gulp-uglify": "^1.2.0",
     "gulp-util": "^3.0.4",
+    "lodash.assign": "^3.2.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "vinyl-transform": "^1.0.0",
-    "watchify": "^3.2.0"
+    "watchify": "^3.2.1"
   },
-  "dependencies": {
-    "jquery": "^2.1.3"
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browser": {
+    "jquery": "./node_modules/jquery/dist/jquery.js",
+    "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.min.js",
+    "jcarousel": "./node_modules/jcarousel/dist/jquery.jcarousel.min.js",
+    "jquery-cookie": "./public/js/external/jquery.cookie.js",
+    "jquery-validate": "./public//js/external/jquery.validate.js",
+    "jquery-countdown": "./public/js/external/jquery.countdown.js",
+    "swfobject": "./public/js/external/swfobject.js",
+    "flash-detect": "./public/js/external/flash-detect.js"
+  },
+  "browserify-shim": {
+    "jquery": "$",
+    "swfobject": "swfobject",
+    "flash-detect": "FlashDetect"
   }
 }

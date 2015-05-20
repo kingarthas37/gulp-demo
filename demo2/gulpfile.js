@@ -1,86 +1,70 @@
-var gulp = require('gulp'),
-    jshint = require('gulp-jshint'),
-    uglify = require('gulp-uglify'),
-    concat = require('gulp-concat'),
-    minifyCss = require('gulp-minify-css'),
-    sass = require('gulp-sass'),
-    imagemin = require('gulp-imagemin'),
-    pngquant = require('imagemin-pngquant');
-
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-
-var transform = require('vinyl-transform');
-
-var browserify = require('browserify');
+'use strict';
 
 var watchify = require('watchify');
+var browserify = require('browserify');
+var gulp = require('gulp');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
 var gutil = require('gulp-util');
+var sourcemaps = require('gulp-sourcemaps');
+var assign = require('lodash.assign');
+var uglify = require('gulp-uglify');
+var factor = require('factor-bundle');
+ 
+
+//最基本使用gulp -> browserify
+/*
+gulp.task('default', function() {
+    return browserify('./public/js/app.js')
+        .bundle()
+        .pipe(source('bundle.js'))
+        .pipe(gulp.dest('./public/dist/'));
+});
+*/
+
+
+//标准使用factor-bundle，没有使用watch-file与性能优化
+
+//gulp.task('default', function() {
+//    return browserify({
+//        entries: ['./public/js/common/main.js', './public/js/individual/main.js']
+//    })
+//        .plugin(factor, {
+//            o: ['./public/dist/extrabux.common.js', './public/dist/extrabux.individual.js']
+//        })
+//        .bundle()
+//        .pipe(source('extrabux.external.js'))
+//        .pipe(gulp.dest('./public/dist/'));
+//});
+
+
+ 
+
+
 
 
 gulp.task('default',function() {
-    gulp.start('browserify1');
-});
 
+    var browserifyArgs = {
+        cache: {}, packageCache: {}, fullPaths: true,
+        entries: ['./public/js/common/main.js', './public/js/individual/main.js'],
+        debug: true
+    };
 
-//基础实例1
-//uglify,concat,minifyCss,sass,imagemin
-gulp.task('base1', function () {
+    var bundler = watchify(browserify(browserifyArgs));
     
-    gulp.src('public/js/*.js')
-        .pipe(uglify())
-        .pipe(concat('app.js'))
-        .pipe(gulp.dest('build'));
+    var bundle = function() {
+        return bundler
+            .plugin(factor, { o: ['./public/dist/extrabux.common.js', './public/dist/extrabux.individual.js'] })
+            .bundle()
+            .pipe(source('extrabux.external.js'))
+            .pipe(gulp.dest('./public/dist/'));
+    };
     
-    gulp.src('public/css/*.css')
-        .pipe(minifyCss({compatibility: 'ie8'}))
-        .pipe(concat('app.css'))
-        .pipe(gulp.dest('build'));
+    bundler.on('update', bundle);
     
-    gulp.src('public/css/*.scss')
-        .pipe(sass())
-        .pipe(concat('scss.css'))
-        .pipe(gulp.dest('build'));
-    
-    gulp.src('public/images/*.png')
-        .pipe(imagemin({
-            progressive: true,
-            svgoPlugins: [{removeViewBox: false}],
-            use: [pngquant()]
-        }))
-        .pipe(gulp.dest('build'));
+    return bundle();
     
 });
 
-
-//browserify实例1 配合vinyl压缩js
-gulp.task('browserify1', function() {
-    return browserify('./public/js/a.js')
-        .bundle()
-        .pipe(source('bundle.js'))
-        .pipe(buffer())
-        .pipe(uglify())
-        .pipe(gulp.dest('./build/'));
-});
-
-
-
-gulp.task('watch',function() {
-    
-    var bundler = watchify(browserify('./public/js/a.js', watchify.args));
-    
-    bundler.transform('brfs');
-    bundler.on('update', rebundle);
-    
-    console.log('');
-    
-    function rebundle() {
-        return bundler.bundle()
-            .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-            .pipe(source('bundle.js'))
-            .pipe(gulp.dest('./build/'));
-    }
-
-    return rebundle();
-    
-});
+ 
