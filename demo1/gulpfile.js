@@ -24,15 +24,16 @@ gulp.task('base', function () {
         .pipe(uglify())
         .pipe(concat('app.js'))
         .pipe(gulp.dest('dist'));
-    
+     
+    gulp.src('public/css/*.scss')
+        .pipe(sass())
+        .pipe(minifyCss({compatibility: 'ie8'}))
+        .pipe(concat('scss.css'))
+        .pipe(gulp.dest('dist'));
+
     gulp.src('public/css/*.css')
         .pipe(minifyCss({compatibility: 'ie8'}))
         .pipe(concat('app.css'))
-        .pipe(gulp.dest('dist'));
-    
-    gulp.src('public/css/*.scss')
-        .pipe(sass())
-        .pipe(concat('scss.css'))
         .pipe(gulp.dest('dist'));
     
     gulp.src('public/images/*.png')
