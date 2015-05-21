@@ -4,11 +4,13 @@ var watchify = require('watchify');
 var browserify = require('browserify');
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
+var source2 = require('vinyl-source-stream2')
 var gutil = require('gulp-util');
-var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var factor = require('factor-bundle');
+var path = require('path');
+var concat = require('concat-stream');
+var file = require('gulp-file');
 
 
 //最基本使用gulp -> browserify
@@ -22,7 +24,7 @@ gulp.task('default', function() {
 */
 
 
-//标准使用factor-bundle，没有使用watch-file与性能优化
+//标准使用factor-bundle，没有使用watchify
 
 //gulp.task('default', function() {
 //    return browserify({
@@ -40,8 +42,6 @@ gulp.task('default', function() {
  
 
 
-
-
 gulp.task('default',function() {
 
     var browserifyArgs = {
@@ -54,17 +54,30 @@ gulp.task('default',function() {
     
     var bundle = function() {
         return bundler
-            .plugin(factor, { o: ['./public/dist/extrabux.common.js', './public/dist/extrabux.individual.js'] })
+            .plugin(factor, {o:[write('./public/dist/extrabux.common.js'),write( './public/dist/extrabux.individual.js')]})
             .bundle()
-            .pipe(source('extrabux.external.js'))
-            .pipe(gulp.dest('./public/dist/'));
+            .pipe(write('extrabux.external.js'));
+           // .pipe(_source('extrabux.external.js'))
+           // .pipe(uglify())
+           // .pipe(gulp.dest('./public/dist/'));
     };
     
     bundler.on('update', bundle);
     bundler.on('log', gutil.log);
     
+//    bundler.on('factor.pipeline', function (id, pipeline) {
+//        pipeline.get('wrap').push(write(id));
+//    });
+    
     return bundle();
     
 });
 
- 
+
+function write(filepath) {
+    return concat(function (content) {
+        return file(path.basename(filepath), content, { src: true })
+            //.pipe(uglify())
+            .pipe(gulp.dest('./public/dist/'))
+    });
+}
