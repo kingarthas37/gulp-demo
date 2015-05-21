@@ -40,7 +40,8 @@
     "jquery-validate": "./public//js/external/jquery.validate.js",
     "jquery-countdown": "./public/js/external/jquery.countdown.js",
     "swfobject": "./public/js/external/swfobject.js",
-    "flash-detect": "./public/js/external/flash-detect.js"
+    "flash-detect": "./public/js/external/flash-detect.js",
+      "page1":"./public/js/individual/page1.js"
   },
   "browserify-shim": {
     "jquery": "$",

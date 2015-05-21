@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "browserify": "^9.0.8",
+    "gulp": "*"
+  },
+  "dependencies": {
+    "jquery": "^2.1.3",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
