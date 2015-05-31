@@ -41,7 +41,6 @@ gulp.task('default', function() {
 
 
 //使用factor-bundle + unlify + watchify 实例 
-
 /*
 gulp.task('default',function() {
 
@@ -94,76 +93,46 @@ function write(filepath) {
 
 
 
-
-//gulp.task('default',function() {
-//    
-//    var b = browserify({
-//        entries: ['./public/js/common/main.js', './public/js/individual/main.js'],
-//        debug: true
-//    });
-//
-//    b.require('./public/js/individual/page1.js',{expose:'page1'});
-//    b.require('./public/js/individual/page2.js',{expose:'page2'});
-//
-//    b.plugin(factor, {o:[write('./public/dist/extrabux.common.js'),write( './public/dist/extrabux.individual.js')]})
-//        .bundle()
-//        .pipe(write('extrabux.external.js'));
-//    
-//    return b;
-//        
-//});
-//
-//function write(filepath) {
-//    return concat(function (content) {
-//        return file(path.basename(filepath), content, { src: true })
-//            .pipe(gulp.dest('./public/dist/'))
-//    });
-//}
-//
-
-
-
-
-
+//使用factor bundle + 页面require + unlify实例
 gulp.task('default',function() {
 
-    var browserifyArgs = {
-        cache: {},
-        packageCache: {},
-        fullPaths: true,
+    
+    var b = browserify({
+          cache: {},
+          packageCache: {},
+          fullPaths: false,
         entries: ['./public/js/common/main.js', './public/js/individual/main.js'],
         debug: true
-    };
+    });
 
-    var b = browserify(browserifyArgs);
-    var bundler = watchify(b);
- 
+    var w = watchify(b);
+
+    w.require('./public/js/individual/page1.js',{expose:'page1'});
+    w.require('./public/js/individual/page2.js',{expose:'page2'});
+    
     var bundle = function() {
         
-        console.log(111);
-        // bundler.require('./public/js/individual/page1.js',{expose:'page1'});
-        
-        bundler.plugin(factor, {o:[write('./public/dist/extrabux.common.js'),write( './public/dist/extrabux.individual.js')]})
+        w.plugin('factor-bundle', {o:[write('./public/dist/extrabux.common.js'),write( './public/dist/extrabux.individual.js')]})
             .bundle()
             .pipe(write('extrabux.external.js'));
-        
-        return bundler;
-        
+
+        return w;
     };
 
-    bundler.on('update', bundle);
-    bundler.on('log', gutil.log);
-
+    w.on('update', bundle);
+    w.on('log', gutil.log);
+    
     return bundle();
     
 });
 
 
-
 function write(filepath) {
     return concat(function (content) {
         return file(path.basename(filepath), content, { src: true })
-            // .pipe(uglify())
-            .pipe(gulp.dest('./public/dist/'))
+        //    .pipe(uglify())
+            .pipe(gulp.dest('./public/dist'))
     });
 }
+
+ 

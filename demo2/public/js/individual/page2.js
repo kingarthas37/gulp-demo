@@ -6,7 +6,7 @@ require('jquery-cookie');
 
 
 module.exports = function() {
-    console.log('page212');
+    console.log('page2122');
     console.log(swfobject);
     console.log(flashDetect.installed);
     $.cookie('user2323','kingarthas');

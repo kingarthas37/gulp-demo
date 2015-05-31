@@ -4,7 +4,8 @@ var flashDetect = require('flash-detect');
 require('jcarousel');
 require('jquery-cookie');
 require('jquery-validate');
- 
+
+console.log('page123456');
 
 module.exports = {
     
@@ -12,10 +13,10 @@ module.exports = {
 
         console.log(swfobject);
 
-        console.log('kingarthas');
+        console.log('page1234');
         console.log(swfobject);
         console.log(flashDetect.installed);
-
+        
         $.cookie('user2323','kingarthas');
 
         $("#commentForm").validate();
