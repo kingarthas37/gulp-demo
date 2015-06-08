@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+
+
+
+<p>browserify综合demo,dev+ prod环境，搭配watchify,factor-bundle等都通过测试</p>
+
+
+<script src="public/dist/extrabux.external.js"></script>
+<script src="public/dist/extrabux.common.js"></script>
+<script src="public/dist/extrabux.individual.js"></script>
+
+<!--<script src="public/dist/extrabux.bundle.js"></script>-->
+
+<script>
+    var page1 = require('pagename1');
+   // var page2 = require('page2');
+  //  var page3 = require('page3');
+    page1.init();
+   // page2();
+</script>
+</body>
+</html>

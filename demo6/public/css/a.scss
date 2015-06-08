@@ -1,0 +1,18 @@
+#a {
+  .name {
+    display: block;
+    &.color {
+      color:#333;
+    }
+  }
+}
+
+.user {
+  span {
+    display: block;
+    width: 100px;
+    height:100px;
+    background-image: url('../images/test.jpg');
+  }
+  
+}
